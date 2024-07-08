@@ -1,13 +1,15 @@
+import { Link } from "react-router-dom";
+
 export default function Navbar() {
   return (
     <div className="flex justify-between items-center bg-slate-400 p-8 shadow-md">
       <nav className="flex gap-4">
-        <a className="hover:underline" href="/">
+        <Link className="hover:underline" to="/">
           Browse
-        </a>
-        <a className="hover:underline " href="/favorites">
+        </Link>
+        <Link className="hover:underline " to="/favorites">
           Favorites
-        </a>
+        </Link>
       </nav>
       <h1 className="text-2xl font-bold">BreweryDB</h1>
       <form className="flex gap-4">
