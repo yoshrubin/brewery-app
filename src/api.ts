@@ -17,3 +17,11 @@ export const fetchBreweries = async (
   }
   return response.json();
 };
+
+export const fetchBrewery = async (id: string) => {
+  const response = await fetch(`${API_URL}/${id}`);
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
+  }
+  return response.json();
+};
