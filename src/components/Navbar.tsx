@@ -12,13 +12,13 @@ export default function Navbar() {
         </Link>
       </nav>
       <h1 className="text-2xl font-bold">BreweryDB</h1>
-      <form className="flex gap-4">
+      <form className="flex gap-2">
         <input
           className="rounded-sm py-3 px-2"
           type="text"
           placeholder="Search"
         />
-        <button className="bg-white p-3 rounded-sm hover:invert" type="submit">
+        <button className="bg-white p-3 rounded-md hover:invert" type="submit">
           Search
         </button>
       </form>
