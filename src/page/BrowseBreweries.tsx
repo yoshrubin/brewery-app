@@ -21,7 +21,8 @@ const BrowseBreweries: React.FC = () => {
     return param ? param : "";
   });
   const perPage = 12;
-  const totalPages = Math.ceil(100 / perPage);
+  const totalPages =
+    breweries.length === 0 ? 0 : Math.ceil(breweries.length / perPage);
 
   const fetchBreweriesData = useCallback(async () => {
     try {
@@ -42,10 +43,16 @@ const BrowseBreweries: React.FC = () => {
   };
 
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
+    console.log(query);
     event.preventDefault();
     setSearchParams({ ...searchParams, query });
     setPage(1);
-    await fetchBreweriesData();
+    try {
+      const data = await fetchBreweries(page, perPage, query);
+      setBreweries(data as Brewery[]);
+    } catch (error) {
+      console.error("Error fetching breweries:", error);
+    }
   };
 
   const [selectedBrewery, setSelectedBrewery] = useState<Brewery | null>(null);
@@ -66,7 +73,7 @@ const BrowseBreweries: React.FC = () => {
       </p>
       <form
         className="flex justify-center items-center space-x-2 my-4"
-        onSubmit={handleSearch}
+        onSubmit={(e) => handleSearch(e)}
       >
         <input
           type="text"
