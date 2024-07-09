@@ -1,41 +1,36 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface Brewery {
+export interface Brewery {
   id: string;
   name: string;
   type: string;
 }
 
 export interface BreweryState {
-  breweries: Brewery[];
-  favorites: Brewery[];
+  favorites: Map<string, Brewery>; // Store favorite breweries with ID as key
 }
 
 const initialState: BreweryState = {
-  breweries: [],
-  favorites: [],
+  favorites: new Map<string, Brewery>(),
 };
 
 const brewerySlice = createSlice({
   name: "brewery",
   initialState,
   reducers: {
-    setBreweries: (state, action: PayloadAction<Brewery[]>) => {
-      state.breweries = action.payload;
-    },
     toggleFavorite: (state, action: PayloadAction<Brewery>) => {
-      const existingIndex = state.favorites.findIndex(
-        (brewery) => brewery.id === action.payload.id
-      );
-      if (existingIndex !== -1) {
-        state.favorites.splice(existingIndex, 1);
+      if (state.favorites.has(action.payload.id)) {
+        state.favorites.delete(action.payload.id);
       } else {
-        state.favorites.push(action.payload);
+        state.favorites.set(action.payload.id, action.payload);
       }
+    },
+    removeAllFavorites: (state) => {
+      state.favorites.clear();
     },
   },
 });
 
-export const { setBreweries, toggleFavorite } = brewerySlice.actions;
+export const { toggleFavorite, removeAllFavorites } = brewerySlice.actions;
 
 export default brewerySlice.reducer;
