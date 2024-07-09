@@ -14,7 +14,6 @@ interface BreweryCardProps {
 const BreweryCard: React.FC<BreweryCardProps> = ({ brewery, isFavorite }) => {
   const dispatch: AppDispatch = useDispatch();
   function handleFavoriteClick() {
-    console.log(brewery);
     dispatch(toggleFavorite(brewery));
   }
   return (
