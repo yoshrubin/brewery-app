@@ -21,8 +21,7 @@ const BrowseBreweries: React.FC = () => {
     return param ? param : "";
   });
   const perPage = 12;
-  const totalPages =
-    breweries.length === 0 ? 0 : Math.ceil(breweries.length / perPage);
+  const totalPages = breweries.length === 0 ? 0 : Math.ceil(100 / perPage);
 
   const fetchBreweriesData = useCallback(async () => {
     try {
@@ -90,16 +89,20 @@ const BrowseBreweries: React.FC = () => {
         </button>
       </form>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
-        {breweries.map((brewery) => (
-          <BreweryCard
-            key={brewery.id}
-            brewery={brewery}
-            isFavorite={!!favorites[brewery.id]}
-            onClick={() => openModal(brewery)}
-          />
-        ))}
-      </div>
+      {breweries.length === 0 && query !== "" ? (
+        <div className="text-center text-2xl">No breweries found</div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
+          {breweries.map((brewery) => (
+            <BreweryCard
+              key={brewery.id}
+              brewery={brewery}
+              isFavorite={!!favorites[brewery.id]}
+              onClick={() => openModal(brewery)}
+            />
+          ))}
+        </div>
+      )}
 
       <Pagination
         page={page}
