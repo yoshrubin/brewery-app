@@ -38,12 +38,19 @@ const BrowseBreweries: React.FC = () => {
   );
 
   useEffect(() => {
+    setPage(Number(searchParams.get("page")) || 1);
     debouncedFetchBreweriesData(page, query);
-  }, [debouncedFetchBreweriesData, searchParams, page]);
+  }, [debouncedFetchBreweriesData, searchParams]);
 
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSearchParams({ ...searchParams, query, page: "1" });
+  };
+
+  const handlePageChange = (value: number) => {
+    setPage(value);
+    searchParams.set("page", value.toString());
+    setSearchParams(searchParams);
   };
 
   const [selectedBrewery, setSelectedBrewery] = useState<Brewery | null>(null);
@@ -99,7 +106,7 @@ const BrowseBreweries: React.FC = () => {
 
       <Pagination
         page={page}
-        onClick={(value) => setPage(value)}
+        onClick={(value) => handlePageChange(value)}
         totalPages={totalPages}
       />
 
