@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function Navbar() {
+const Navbar: React.FC = () => {
   return (
     <div className="flex items-center bg-slate-400 p-8 shadow-md justify-between">
       <h1 className="text-2xl font-bold">🍺 BreweryDB</h1>
@@ -14,4 +14,6 @@ export default function Navbar() {
       </nav>
     </div>
   );
-}
+};
+
+export default Navbar;
