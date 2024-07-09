@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { fetchBreweries } from "../api";
@@ -7,6 +7,7 @@ import BreweryCard from "../components/BreweryCard";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "../components/Pagination";
 import BreweryModal from "../components/BreweryModal";
+import { debounce } from "lodash";
 
 const BrowseBreweries: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,35 +24,26 @@ const BrowseBreweries: React.FC = () => {
   const perPage = 12;
   const totalPages = breweries.length === 0 ? 0 : Math.ceil(100 / perPage);
 
-  const fetchBreweriesData = useCallback(async () => {
-    try {
-      const data = await fetchBreweries(page, perPage, query);
-      setBreweries(data as Brewery[]);
-    } catch (error) {
-      console.error("Error fetching breweries:", error);
-    }
-  }, [page, perPage]);
+  const debouncedFetchBreweriesData = useMemo(
+    () =>
+      debounce(async (page: number, query: string) => {
+        try {
+          const data = await fetchBreweries(page, perPage, query);
+          setBreweries(data as Brewery[]);
+        } catch (error) {
+          console.error("Error fetching breweries:", error);
+        }
+      }, 300),
+    []
+  );
 
   useEffect(() => {
-    fetchBreweriesData();
-  }, [fetchBreweriesData, page, perPage]);
-
-  const setCurrentPage = (value: number) => {
-    setPage(value);
-    setSearchParams({ ...searchParams, page: value.toString() });
-  };
+    debouncedFetchBreweriesData(page, query);
+  }, [debouncedFetchBreweriesData, searchParams, page]);
 
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
-    console.log(query);
     event.preventDefault();
-    setSearchParams({ ...searchParams, query });
-    setPage(1);
-    try {
-      const data = await fetchBreweries(page, perPage, query);
-      setBreweries(data as Brewery[]);
-    } catch (error) {
-      console.error("Error fetching breweries:", error);
-    }
+    setSearchParams({ ...searchParams, query, page: "1" });
   };
 
   const [selectedBrewery, setSelectedBrewery] = useState<Brewery | null>(null);
@@ -76,10 +68,11 @@ const BrowseBreweries: React.FC = () => {
       >
         <input
           type="text"
+          id="search"
           placeholder="Search Breweries"
           className="border border-gray-300 p-2 rounded-md w-full max-w-80 mx-auto"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setQuery((e.target as HTMLInputElement).value)}
         />
         <button
           type="submit"
@@ -106,7 +99,7 @@ const BrowseBreweries: React.FC = () => {
 
       <Pagination
         page={page}
-        onClick={(value) => setCurrentPage(value)}
+        onClick={(value) => setPage(value)}
         totalPages={totalPages}
       />
 
