@@ -52,6 +52,7 @@ const BrowseFavorites: React.FC = () => {
             brewery={brewery}
             isFavorite={!!favorites[brewery.id]}
             onClick={() => openModal(brewery)}
+            showRank={true}
           />
         ))}
       </div>

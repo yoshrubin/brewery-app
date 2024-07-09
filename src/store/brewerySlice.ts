@@ -29,6 +29,7 @@ export interface Brewery {
   website_url: string;
   state: string;
   street: string;
+  rank: number | undefined;
 }
 
 export interface BreweryState {
@@ -54,9 +55,13 @@ const brewerySlice = createSlice({
     removeAllFavorites: (state) => {
       state.favorites = {};
     },
+    setBreweryRank: (state, action: PayloadAction<Brewery>) => {
+      state.favorites[action.payload.id].rank = action.payload.rank;
+    },
   },
 });
 
-export const { toggleFavorite, removeAllFavorites } = brewerySlice.actions;
+export const { toggleFavorite, removeAllFavorites, setBreweryRank } =
+  brewerySlice.actions;
 
 export default brewerySlice.reducer;
