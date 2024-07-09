@@ -6,6 +6,7 @@ import { Brewery } from "../store/brewerySlice";
 import BreweryCard from "../components/BreweryCard";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "../components/Pagination";
+import BreweryModal from "../components/BreweryModal";
 
 const BrowseBreweries: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -20,6 +21,7 @@ const BrowseBreweries: React.FC = () => {
     return param ? param : "";
   });
   const perPage = 12;
+  const totalPages = Math.ceil(100 / perPage);
 
   const fetchBreweriesData = useCallback(async () => {
     try {
@@ -43,10 +45,18 @@ const BrowseBreweries: React.FC = () => {
     event.preventDefault();
     setSearchParams({ ...searchParams, query });
     setPage(1);
-    await fetchBreweriesData(); // Fetch data immediately on search submit
+    await fetchBreweriesData();
   };
 
-  const totalPages = Math.ceil(100 / perPage);
+  const [selectedBrewery, setSelectedBrewery] = useState<Brewery | null>(null);
+
+  const openModal = (brewery: Brewery) => {
+    setSelectedBrewery(brewery);
+  };
+
+  const closeModal = () => {
+    setSelectedBrewery(null);
+  };
 
   return (
     <>
@@ -79,6 +89,7 @@ const BrowseBreweries: React.FC = () => {
             key={brewery.id}
             brewery={brewery}
             isFavorite={!!favorites[brewery.id]}
+            onClick={() => openModal(brewery)}
           />
         ))}
       </div>
@@ -87,6 +98,12 @@ const BrowseBreweries: React.FC = () => {
         page={page}
         onClick={(value) => setCurrentPage(value)}
         totalPages={totalPages}
+      />
+
+      <BreweryModal
+        isOpen={selectedBrewery !== null}
+        onClose={closeModal}
+        brewery={selectedBrewery}
       />
     </>
   );

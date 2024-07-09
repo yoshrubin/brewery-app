@@ -9,15 +9,23 @@ import { AppDispatch } from "../store";
 interface BreweryCardProps {
   brewery: Brewery;
   isFavorite: boolean;
+  onClick: () => void;
 }
 
-const BreweryCard: React.FC<BreweryCardProps> = ({ brewery, isFavorite }) => {
+const BreweryCard: React.FC<BreweryCardProps> = ({
+  brewery,
+  isFavorite,
+  onClick,
+}) => {
   const dispatch: AppDispatch = useDispatch();
   function handleFavoriteClick() {
     dispatch(toggleFavorite(brewery));
   }
   return (
-    <div className="bg-white shadow-md rounded-md p-4 text-center hover:bg-slate-200">
+    <div
+      className="bg-white shadow-md rounded-md p-4 text-center hover:bg-slate-200"
+      onClick={onClick}
+    >
       <div>
         <h5 className="text-lg font-semibold">{brewery.name}</h5>
         <p>{brewery.brewery_type}</p>

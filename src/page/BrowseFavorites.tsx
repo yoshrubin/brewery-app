@@ -3,6 +3,8 @@ import BreweryCard from "../components/BreweryCard";
 import { RootState } from "../store";
 import { useState } from "react";
 import Pagination from "../components/Pagination";
+import { Brewery } from "../store/brewerySlice";
+import BreweryModal from "../components/BreweryModal";
 
 const BrowseFavorites: React.FC = () => {
   const favorites = useSelector((state: RootState) => state.brewery.favorites);
@@ -13,6 +15,16 @@ const BrowseFavorites: React.FC = () => {
 
   const setCurrentPage = (value: number) => {
     setPage(value);
+  };
+
+  const [selectedBrewery, setSelectedBrewery] = useState<Brewery | null>(null);
+
+  const openModal = (brewery: Brewery) => {
+    setSelectedBrewery(brewery);
+  };
+
+  const closeModal = () => {
+    setSelectedBrewery(null);
   };
   return (
     <div>
@@ -26,6 +38,7 @@ const BrowseFavorites: React.FC = () => {
             key={brewery.id}
             brewery={brewery}
             isFavorite={!!favorites[brewery.id]}
+            onClick={() => openModal(brewery)}
           />
         ))}
       </div>
@@ -34,6 +47,11 @@ const BrowseFavorites: React.FC = () => {
         page={page}
         onClick={(value) => setCurrentPage(value)}
         totalPages={totalPages}
+      />
+      <BreweryModal
+        isOpen={selectedBrewery !== null}
+        onClose={closeModal}
+        brewery={selectedBrewery}
       />
     </div>
   );
