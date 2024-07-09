@@ -7,6 +7,7 @@ import BrowseBreweries from "./page/BrowseBreweries";
 import { Provider } from "react-redux";
 import store from "./store";
 import Root from "./routes/root";
+import BrowseFavorites from "./page/BrowseFavorites";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/favorites",
-        element: <div>Favorites</div>,
+        element: <BrowseFavorites />,
       },
     ],
   },

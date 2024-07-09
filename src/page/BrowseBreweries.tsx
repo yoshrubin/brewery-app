@@ -46,8 +46,10 @@ const BrowseBreweries: React.FC = () => {
     await fetchBreweriesData(); // Fetch data immediately on search submit
   };
 
+  const totalPages = Math.ceil(100 / perPage);
+
   return (
-    <div className="max-w-screen-lg mx-auto flex flex-col items-center">
+    <>
       <h1 className="text-2xl font-bold text-center mt-5">Browse Breweries</h1>
       <p className="text-sm text-center">
         Browse the list of breweries and find your favorites.
@@ -81,8 +83,12 @@ const BrowseBreweries: React.FC = () => {
         ))}
       </div>
 
-      <Pagination page={page} onClick={(value) => setCurrentPage(value)} />
-    </div>
+      <Pagination
+        page={page}
+        onClick={(value) => setCurrentPage(value)}
+        totalPages={totalPages}
+      />
+    </>
   );
 };
 

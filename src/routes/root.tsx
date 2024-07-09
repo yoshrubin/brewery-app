@@ -5,7 +5,9 @@ export default function Root() {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <div className="max-w-screen-lg mx-auto flex flex-col items-center">
+        <Outlet />
+      </div>
     </>
   );
 }
