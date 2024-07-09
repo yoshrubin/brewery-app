@@ -12,8 +12,9 @@ export default function Root() {
 }
 
 export const loader = async () => {
-  const fetchedBreweries = await fetchBreweries(1, 10);
-  return {
-    breweries: fetchedBreweries.data,
-  };
+  const page = 1;
+  const perPage = 12;
+
+  const fetchedBreweries = await fetchBreweries(page, perPage);
+  return fetchedBreweries;
 };

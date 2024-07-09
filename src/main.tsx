@@ -4,17 +4,20 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error-page";
 import Root, { loader as rootLoader } from "./routes/root";
+import BrowseBreweries from "./page/BrowseBreweries";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
-    loader: rootLoader,
     children: [
       {
         path: "/",
-        element: <div>Home</div>,
+        element: <BrowseBreweries />,
+        loader: rootLoader,
       },
       {
         path: "/favorites",
@@ -26,6 +29,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

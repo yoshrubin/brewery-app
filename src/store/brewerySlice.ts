@@ -1,17 +1,42 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+type BreweryTypes =
+  | "micro"
+  | "nano"
+  | "regional"
+  | "brewpub"
+  | "large"
+  | "planning"
+  | "bar"
+  | "contract"
+  | "proprietor"
+  | "closed";
+
 export interface Brewery {
   id: string;
   name: string;
-  type: string;
+  brewery_type: BreweryTypes;
+  address_1: string;
+  address_2: string | null;
+  address_3: string | null;
+  city: string;
+  state_province: string;
+  postal_code: string | null;
+  country: string;
+  longitude: string | null;
+  latitude: string | null;
+  phone: string;
+  website_url: string;
+  state: string;
+  street: string;
 }
 
 export interface BreweryState {
-  favorites: Map<string, Brewery>; // Store favorite breweries with ID as key
+  favorites: { [key: string]: Brewery };
 }
 
 const initialState: BreweryState = {
-  favorites: new Map<string, Brewery>(),
+  favorites: {},
 };
 
 const brewerySlice = createSlice({
@@ -19,14 +44,15 @@ const brewerySlice = createSlice({
   initialState,
   reducers: {
     toggleFavorite: (state, action: PayloadAction<Brewery>) => {
-      if (state.favorites.has(action.payload.id)) {
-        state.favorites.delete(action.payload.id);
+      const id = action.payload.id;
+      if (state.favorites[id]) {
+        delete state.favorites[id];
       } else {
-        state.favorites.set(action.payload.id, action.payload);
+        state.favorites[id] = action.payload;
       }
     },
     removeAllFavorites: (state) => {
-      state.favorites.clear();
+      state.favorites = {};
     },
   },
 });
