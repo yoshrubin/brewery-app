@@ -14,9 +14,9 @@ const Pagination: React.FC<PaginationProps> = ({
   return (
     <div className="flex space-x-4 items-center">
       <button
-        className={`bg-white hover:bg-slate-200 rounded-md p-2 text-center ${
-          page === 1 ? "opacity-50 pointer-events-none" : ""
-        }`}
+        className={`bg-white hover:bg-slate-200 rounded-md p-2 text-center 
+            ${page === 1 ? "opacity-50 pointer-events-none" : ""}`}
+        disabled={page === 1}
         onClick={() => {
           if (page === 1) return;
           onClick((page -= 1));
@@ -25,14 +25,18 @@ const Pagination: React.FC<PaginationProps> = ({
         <img src={arrowRight} alt="Arrow Left" className="rotate-180" />
       </button>
       <p className="text-center">{page}</p>
-      {page !== totalPages && (
-        <button
-          className="bg-white hover:bg-slate-200 rounded-md p-2 text-center"
-          onClick={() => onClick((page += 1))}
-        >
-          <img src={arrowRight} alt="Arrow Right" />
-        </button>
-      )}
+
+      <button
+        className={`bg-white hover:bg-slate-200 rounded-md p-2 text-center
+            ${page === totalPages ? "opacity-50 pointer-events-none" : ""}`}
+        disabled={page === totalPages}
+        onClick={() => {
+          if (page === totalPages) return;
+          onClick((page += 1));
+        }}
+      >
+        <img src={arrowRight} alt="Arrow Right" />
+      </button>
     </div>
   );
 };
