@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BreweryCard from "../components/BreweryCard";
-import { RootState } from "../store";
+import { AppDispatch, RootState } from "../store";
 import { useState } from "react";
 import Pagination from "../components/Pagination";
-import { Brewery } from "../store/brewerySlice";
+import { Brewery, removeAllFavorites } from "../store/brewerySlice";
 import BreweryModal from "../components/BreweryModal";
 
 const BrowseFavorites: React.FC = () => {
@@ -26,12 +26,25 @@ const BrowseFavorites: React.FC = () => {
   const closeModal = () => {
     setSelectedBrewery(null);
   };
+  const dispatch: AppDispatch = useDispatch();
+
+  function clearFavorites() {
+    if (window.confirm("Are you sure you want to clear all favorites?")) {
+      dispatch(removeAllFavorites());
+    }
+  }
+
   return (
-    <div>
+    <div className="flex flex-col space-y-4 items-center">
       <h1 className="text-2xl font-bold text-center mt-5">Browse Favorites</h1>
-      <p className="text-sm text-center">
-        Your favorite breweries will be listed here.
-      </p>
+      {favoritesArray.length > 0 && (
+        <button
+          className="bg-blue-500 text-white py-2 px-4 rounded-md mt-4"
+          onClick={clearFavorites}
+        >
+          Remove All Favorites
+        </button>
+      )}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4">
         {breweries.map((brewery) => (
           <BreweryCard
