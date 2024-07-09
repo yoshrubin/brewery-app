@@ -5,6 +5,7 @@ import { useState } from "react";
 import Pagination from "../components/Pagination";
 import { Brewery, removeAllFavorites } from "../store/brewerySlice";
 import BreweryModal from "../components/BreweryModal";
+import { Link } from "react-router-dom";
 
 const BrowseFavorites: React.FC = () => {
   const favorites = useSelector((state: RootState) => state.brewery.favorites);
@@ -34,7 +35,14 @@ const BrowseFavorites: React.FC = () => {
     }
   }
 
-  return (
+  return favoritesArray.length === 0 ? (
+    <div className="flex flex-col justify-center space-y-4 items-center text-2xl mt-20">
+      <Link className="text-blue-500 inline-block" to="/">
+        Browse breweries
+      </Link>
+      <p>to find your favorites.</p>
+    </div>
+  ) : (
     <div className="flex flex-col space-y-4 items-center">
       <h1 className="text-2xl font-bold text-center mt-5">Browse Favorites</h1>
       {favoritesArray.length > 0 && (
