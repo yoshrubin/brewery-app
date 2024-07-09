@@ -11,6 +11,7 @@ const Pagination: React.FC<PaginationProps> = ({
   onClick,
   totalPages,
 }) => {
+  if (totalPages === 0) return null;
   return (
     <div className="flex space-x-4 items-center">
       <button
